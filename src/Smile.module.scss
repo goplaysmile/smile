@@ -1,0 +1,23 @@
+.smile {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+%cam {
+  position: absolute;
+  top: 10px;
+  height: 30vmin;
+  border-radius: 8px;
+  filter: drop-shadow(0 1px 1px black);
+}
+
+.theirCam {
+  @extend %cam;
+  left: 10px;
+}
+
+.ourCam {
+  @extend %cam;
+  right: 10px;
+}

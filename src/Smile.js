@@ -1,9 +1,7 @@
 import React, { createRef, useRef, useState, useEffect } from 'react'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
-// import { useDocument, useCollection } from 'react-firebase-hooks/firestore'
 import 'webrtc-adapter'
-import Auth from './Auth'
 import styles from './Smile.module.scss'
 
 // handleDoc processes a request from firestore.
@@ -163,6 +161,7 @@ function Smile({ uid }) {
         ref={theirCam}
         className={styles.theirCam}
         autoPlay
+        muted
         playsInline
       ></video>
 
@@ -178,4 +177,4 @@ function Smile({ uid }) {
   )
 }
 
-export default () => <Auth render={Smile} />
+export default Smile

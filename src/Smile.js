@@ -21,7 +21,7 @@ async function handleDoc(uid, doc, type, pc, facingMode) {
 }
 
 // setDoc updates firestore with either an offer, answer, or ice request.
-async function setDoc(uid, msg) {
+export async function setDoc(uid, msg) {
   console.log(`setDoc: ${JSON.stringify(msg, null, 2)}`)
 
   return firebase.firestore().collection('webrtc').doc(uid)
@@ -87,18 +87,20 @@ async function openCamera(pc, facingMode, cam) {
 
   })
 
-  if (cam) cam.current.srcObject = stream
+  if (cam && cam.current) cam.current.srcObject = stream
 }
 
 // createOffer signals to another user the offer to communicate.
-async function createOffer(pc, uid) {
-  const offer = await pc.current.createOffer()
+async function createOffer(pc, offer, onOffer) {
+  if (offer) return
+  
+  const o = await pc.current.createOffer()
     .catch(err => alert(`createOffer: ${err}`))
 
-  await pc.current.setLocalDescription(offer)
+  await pc.current.setLocalDescription(o)
     .catch(err => alert(`setLocalDescription: ${err}`))
 
-  setDoc(uid, { sdp: pc.current.localDescription })
+  onOffer(pc.current.localDescription)
 }
 
 // handleIceCandidate responds to an incoming ICE candidate.
@@ -116,38 +118,36 @@ function handleTrack(e, cam) {
 }
 
 // Smile is the core component.
-function Smile({ uid }) {
+function Smile({ offer, onOffer }) {
   console.warn(`Smile render!`)
 
   const [facingMode, setFacingMode] = useState('user')
   const pc = useRef()
-  const theirCam = createRef()
+  const theirCam = useRef()
   useEffect(() => {
-    console.log(`uid: ${uid}`)
-
     pc.current = new RTCPeerConnection({
       iceServers: [
         { urls: 'stun:stun.services.mozilla.com' },
         { urls: 'stun:stun.l.google.com:19302' },
       ],
     })
-    pc.current.onicecandidate = e => handleIceCandidate(e, uid)
+    pc.current.onicecandidate = e => handleIceCandidate(e)
     pc.current.ontrack        = e => handleTrack(e, theirCam)
 
-    const dc = pc.current.createDataChannel('data')
-    dc.onopen = _ => {
-      alert('dc.onopen!')
-    }
+    // const dc = pc.current.createDataChannel('data')
+    // dc.onopen = _ => {
+    //   alert('dc.onopen!')
+    // }
 
-    return firebase.firestore().collection('webrtc').onSnapshot(snapshot => 
-      snapshot.docChanges().forEach(async ({ doc, type }) =>
-        handleDoc(uid, doc, type, pc, facingMode)
-      )
-    )
+    // return firebase.firestore().collection('webrtc').onSnapshot(snapshot => 
+    //   snapshot.docChanges().forEach(async ({ doc, type }) =>
+    //     handleDoc(uid, doc, type, pc, facingMode)
+    //   )
+    // )
 
   }, [])
 
-  const ourCam = createRef()
+  const ourCam = useRef()
   useEffect(() => {
     openCamera(pc, facingMode, ourCam)
   }, [facingMode])
@@ -155,7 +155,7 @@ function Smile({ uid }) {
   return (
     <div
       className={styles.smile}
-      onClick={() => createOffer(pc, uid)}
+      onClick={() => createOffer(pc, offer, onOffer)}
     >
       <video
         ref={theirCam}

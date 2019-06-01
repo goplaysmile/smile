@@ -21,12 +21,10 @@ function App() {
         const msg = doc.data()
         console.log(`handleDoc: ${JSON.stringify(msg, null, 2)}`)
 
-        // if      (msg.ice)                   await handleIce(pc, msg.ice)
-        // else if (msg.type === 'offer')  await handleOffer(user.uid, pc, msg.sdp, facingMode)
-        // else if (msg.type === 'answer') await handleAnswer(pc, msg.sdp)
-        // else                                return alert(`handleDoc: unknown data.`)
+        if (msg.type === 'offer' || msg.type === 'answer') setRemote(msg)
+        else setIce(msg)
 
-        // return doc.ref.delete()
+        return doc.ref.delete()
       })
     )
   }, [user])
@@ -40,11 +38,6 @@ function App() {
           console.log(`Smile onLocalDesc!`)
           setDoc(user.uid, local)
           setLocal(local)
-        }}
-        onRemoteDesc={remote => {
-          console.log(`Smile onRemoteDesc!`)
-          setDoc(user.uid, remote)
-          setRemote(remote)
         }}
         onIceCand={ice => {
           console.log(`Smile onIceCand!`)

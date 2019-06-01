@@ -29,6 +29,15 @@ export async function setDoc(uid, msg) {
     .catch(alert)
 }
 
+// handleIceCandidate responds to an incoming ICE candidate.
+async function handleIceCandidate(e, onIceCand) {
+  console.log('handleIceCandidate!')
+
+  return e.candidate
+    ? onIceCand(e.candidate)
+    : console.log(`handleIceCandidate: ice broadcast arrived.`)
+}
+
 // handleIce processes an ICE request.
 async function handleIce(pc, ice) {
   console.warn('handleIce!')
@@ -105,15 +114,6 @@ async function createOffer(pc, localDesc, onLocalDesc) {
   onLocalDesc(pc.current.localDescription)
 }
 
-// handleIceCandidate responds to an incoming ICE candidate.
-async function handleIceCandidate(e, onIceCand) {
-  console.log('handleIceCandidate!')
-
-  return e.candidate
-    ? onIceCand(e.candidate)
-    : console.log(`handleIceCandidate: ice broadcast arrived.`)
-}
-
 // handleTrack responds to an incoming track for the stream.
 function handleTrack(e, cam) {
   cam.current.srcObject = e.streams[0]
@@ -122,7 +122,6 @@ function handleTrack(e, cam) {
 // Smile is the core component.
 function Smile({
   onLocalDesc,
-  onRemoteDesc,
   onIceCand,
   localDesc,
   remoteDesc,

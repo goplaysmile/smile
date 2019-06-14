@@ -1,0 +1,64 @@
+.Cam {
+  position: absolute;
+  // transform: translate(-50%, -150%);
+  text-align: center;
+  // transition: left 1s;
+  // border: 1px solid;
+}
+
+%Hat {
+  position: absolute;
+  font-size: 90px;
+}
+.BilledHat {
+  @extend %Hat;
+  top: -40px;
+  left: -25px;
+}
+.BombHat {
+  @extend %Hat;
+  top: -53%;
+  left: -18%;
+}
+.TopHat {
+  @extend %Hat;
+  top: -58px;
+  left: -14px;
+}
+
+.Crop {
+  width: 64px;
+  height: 88px;
+  overflow: hidden;
+  border-radius: 32px;
+  // filter: drop-shadow(0 1px 1px black);
+  mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
+}
+
+.Crop video {
+  position: relative;
+  height: 200%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.Body {
+  position: absolute;
+  top: 77px;
+  height: 97px;
+  // image-rendering: pixelated;
+  transform: translate(-50%, -50%);
+}
+
+.Name {
+  position: absolute;
+  transform: translate(-50%, 200%);
+  color: white;
+  background-color: black;
+  // filter: drop-shadow(0 1px 1px black);
+  margin-top: 3px;
+  padding: 1px 5px;
+  // border: 1px solid black;
+  border-radius: 128px;
+}

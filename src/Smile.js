@@ -3,6 +3,7 @@ import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'webrtc-adapter'
 import styles from './Smile.module.scss'
+import Cam from './Cam'
 
 // // handleDoc processes a request from firestore.
 // async function handleDoc(uid, doc, type, pc, facingMode) {
@@ -75,12 +76,12 @@ async function handleAnswer(pc, sdp) {
 // openCamera opens a camera and adds tracks to the stream.
 async function openCamera(pc, facingMode, cam) {
   if (!navigator.mediaDevices) return alert(`This browser does not support WebRTC. Try using the original browser for this device.`)
-  if (!pc.current)             return alert(`RTCPeerConnection lost.`)
+  if (!pc.current) return alert(`RTCPeerConnection lost.`)
 
   facingMode = facingMode || 'user'
-  
+
   const stream = await navigator.mediaDevices.getUserMedia({
-    video: {facingMode},
+    video: { facingMode },
     audio: true,
   })
 
@@ -104,7 +105,7 @@ async function openCamera(pc, facingMode, cam) {
 // createOffer signals to another user the offer to communicate.
 async function createOffer(pc, localDesc, onLocalDesc) {
   if (localDesc) return
-  
+
   const offer = await pc.current.createOffer()
     .catch(err => alert(`createOffer: ${err}`))
 
@@ -142,7 +143,7 @@ function Smile({
       ],
     })
     pc.current.onicecandidate = e => handleIceCandidate(e, onIceCand)
-    pc.current.ontrack        = e => handleTrack(e, theirCam)
+    pc.current.ontrack = e => handleTrack(e, theirCam)
 
     // const dc = pc.current.createDataChannel('data')
     // dc.onopen = _ => {
@@ -177,7 +178,33 @@ function Smile({
       className={styles.smile}
       onClick={() => createOffer(pc, localDesc, onLocalDesc)}
     >
-      <video
+      <Cam
+        camRef={theirCam}
+        style={{
+          top: `${50}px`,
+          left: `${20}px`,
+        }}
+        anim={'stand'}
+        hat="🧢"
+      // onStream={stream => {
+      //   // WebRTC stuff
+      // }}
+      />
+
+      <Cam
+        camRef={ourCam}
+        style={{
+          top: `${50}px`,
+          right: `${20}px`,
+        }}
+        anim={'stand'}
+        hat="🎩"
+      // onStream={stream => {
+      //   // WebRTC stuff
+      // }}
+      />
+
+      {/* <video
         ref={theirCam}
         className={styles.theirCam}
         autoPlay
@@ -192,7 +219,7 @@ function Smile({
         muted
         playsInline
         onClick={() => setFacingMode(facingMode === 'user' ? 'environment' : 'user')}
-      ></video>
+      ></video> */}
     </div>
   )
 }

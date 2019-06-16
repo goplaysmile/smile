@@ -1,15 +1,17 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { /* useRef, */ useEffect, useState } from 'react'
 // import styled from 'styled-components'
 import styles from './Cam.module.scss'
+import cx from 'classnames'
 import { anims } from './const'
 
 let hats = {
   '🧢': styles.BilledHat,
   '💣': styles.BombHat,
   '🎩': styles.TopHat,
+  '👒': styles.SunHat,
 }
 
-function Cam({ camRef, style, anim, hat, onStream }) {
+function Cam({ camRef, style, anim, hat, flip, muted, onStream }) {
   let { frames, rate } = anims[anim]
 
   let [frame, setFrame] = useState(0)
@@ -40,7 +42,7 @@ function Cam({ camRef, style, anim, hat, onStream }) {
 
   return (
     <div
-      className={styles.Cam}
+      className={cx(styles.Cam, flip && styles.Flip)}
       style={style}
       hidden={!camRef || !camRef.current || !camRef.current.srcObject}
     >
@@ -62,12 +64,12 @@ function Cam({ camRef, style, anim, hat, onStream }) {
         )
       }
 
-      <div className={styles.Crop}>
+      <div className={cx(styles.Crop, flip || styles.Flip)}>
         <video
           ref={camRef}
           autoPlay
           playsInline
-          muted
+          muted={muted}
         // hidden
         />
       </div>
@@ -83,7 +85,7 @@ function Cam({ camRef, style, anim, hat, onStream }) {
   )
 }
 
-function useMedia(facingMode, audio, connRef) {
+/* function useMedia(facingMode, audio, connRef) {
   let [stream, setStream] = useState()
 
   facingMode = facingMode || 'user'
@@ -122,7 +124,7 @@ function useMedia(facingMode, audio, connRef) {
   // })
 
   return stream
-}
+} */
 
 // function nextFrame(arr, dt, off) {
 //   let t = Date.now() - (off || 0)

@@ -6,6 +6,10 @@
   // border: 1px solid;
 }
 
+.Flip {
+  transform: scale(-1, 1);
+}
+
 %Hat {
   position: absolute;
   font-size: 90px;
@@ -23,6 +27,11 @@
 .TopHat {
   @extend %Hat;
   top: -58px;
+  left: -14px;
+}
+.SunHat {
+  @extend %Hat;
+  top: -45px;
   left: -14px;
 }
 

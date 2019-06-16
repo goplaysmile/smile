@@ -1,0 +1,23 @@
+.App {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+%Video {
+  position: absolute;
+  top: 10px;
+  height: 30vmin;
+  border-radius: 8px;
+  filter: drop-shadow(0 1px 1px black);
+}
+
+.TheirVideo {
+  @extend %Video;
+  left: 10px;
+}
+
+.OurVideo {
+  @extend %Video;
+  right: 10px;
+}

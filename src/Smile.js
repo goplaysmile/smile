@@ -130,7 +130,7 @@ function Smile({
 }) {
   console.warn(`Smile render!`)
 
-  const [facingMode, setFacingMode] = useState('user')
+  const [facingMode/* , setFacingMode */] = useState('user')
   const pc = useRef()
   const ourCam = useRef()
   const theirCam = useRef()

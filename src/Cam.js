@@ -9,6 +9,7 @@ let hats = {
   '💣': styles.BombHat,
   '🎩': styles.TopHat,
   '👒': styles.SunHat,
+  '⛑': styles.MedicHat,
 }
 
 function Cam({ camRef, style, anim, hat, flip, muted, onStream }) {

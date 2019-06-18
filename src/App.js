@@ -7,8 +7,19 @@ import useUser from './User'
 import Cam from './Cam'
 import styles from './App.module.scss'
 
+let hats = {
+  'LdKxIBNNyKQwZYg29zbKUwq3ypO2': '⛑',
+  [undefined]: '🧢',
+}
+
 function App() {
   let [user, uids] = useUser()
+  let [theirUid, setTheirUid] = useState()
+
+  useEffect(() => {
+    if (!user) return
+    console.log(`uid ${user.uid}`)
+  }, [user])
 
   let peerRef = useRef()
   useEffect(() => {
@@ -22,7 +33,7 @@ function App() {
 
     navigator.mediaDevices.getUserMedia({
       video: true,
-      // audio: true,
+      audio: true,
     }).then(stream => {
       setOurStream(stream)
       ourVideo.current.srcObject = stream
@@ -31,7 +42,7 @@ function App() {
   }, [])
 
   let theirVideo = useRef()
-  let [, setTheirStream] = useState()
+  let [theirStream, setTheirStream] = useState()
   useEffect(() => {
 
     if (!peerRef.current || !ourStream) return
@@ -58,6 +69,52 @@ function App() {
 
   }, [peerRef.current, ourStream])
 
+  // useEffect(() => {
+  //   if (theirUid) return
+
+  //   let theirUid = uids.find(theirUid => theirUid !== user.uid)
+
+  //   if (theirUid) {
+  //     alert(`You can call ${theirUid} now.`)
+  //   } else if (uids.length === 1) {
+  //     alert(`Nobody is online; please wait...`)
+  //   }
+  // }, [uids])
+
+  //
+
+  // useEffect(() => {
+  //   // if (theirStream && !uids[theirUid]) { // logged off
+  //   //   setTheirStream(undefined)
+  //   //   return
+  //   // }
+
+  //   // if (theirStream) return
+
+  //   let theirUid = uids.find(theirUid => theirUid !== user.uid)
+
+  //   // navigator.mediaDevices.getUserMedia({
+  //   //   video: true,
+  //   //   // audio: true,
+  //   // }).then(ourStream => {
+  //   //   setOurStream(ourStream)
+  //   //   ourVideo.current.srcObject = ourStream
+
+  //   if (!theirUid || !ourStream) return
+
+  //   setTheirUid(theirUid)
+
+  //   console.log(`calling ${theirUid}..`)
+  //   let call = peerRef.current.call(theirUid, ourStream)
+
+  //   call.on('stream', stream => {
+  //     console.log(`one of their streams have arrived!`)
+  //     setTheirStream(stream)
+  //     theirVideo.current.srcObject = stream
+  //   })
+  //   // })
+  // }, [uids, theirStream])
+
   return (
     <div
       className={styles.App}
@@ -73,6 +130,8 @@ function App() {
         //   ourVideo.current.srcObject = ourStream
 
         if (!theirUid || !ourStream) return
+
+        setTheirUid(theirUid)
 
         console.log(`calling ${theirUid}..`)
         let call = peerRef.current.call(theirUid, ourStream)
@@ -94,21 +153,29 @@ function App() {
           left: `${20}px`,
         }}
         anim={'stand'}
-        hat="🧢"
+        hat={hats[theirUid] || hats[undefined]}
         flip
-        muted
+        hidden={!uids[theirUid]}
       />
 
-      <Cam
-        camRef={ourVideo}
-        className={styles.OurVideo}
-        style={{
-          top: `${50}px`,
-          right: `${20}px`,
-        }}
-        anim={'stand'}
-        hat="👒"
-      />
+      {
+        user ? (
+          <Cam
+            camRef={ourVideo}
+            className={styles.OurVideo}
+            style={{
+              top: `${50}px`,
+              right: `${20}px`,
+            }}
+            anim={'stand'}
+            hat={hats[user.uid] || hats[undefined]}
+            muted
+          // hidden={!user}
+          />
+        ) : null
+      }
+
+
 
       {/* <video
         ref={theirVideo}

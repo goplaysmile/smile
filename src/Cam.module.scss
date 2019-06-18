@@ -34,6 +34,11 @@
   top: -45px;
   left: -14px;
 }
+.MedicHat {
+  @extend %Hat;
+  top: -35px;
+  left: -19px;
+}
 
 .Crop {
   width: 64px;

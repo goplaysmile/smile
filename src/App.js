@@ -32,7 +32,7 @@ function App() {
   useEffect(() => {
 
     navigator.mediaDevices.getUserMedia({
-      video: true,
+      video: { facingMode: 'user' },
       audio: true,
     }).then(stream => {
       setOurStream(stream)

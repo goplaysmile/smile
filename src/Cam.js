@@ -47,7 +47,12 @@ function Cam({ camRef, style, anim, hat, flip, muted, onStream }) {
       style={style}
       hidden={!camRef || !camRef.current || !camRef.current.srcObject}
     >
-      {
+      <img
+        className={styles.Body}
+        src={anims['stand'].frames[frame]}
+        alt="sprite body"
+      />
+      {/* {
         Object.keys(anims).flatMap(a =>
           anims[a].frames.map((body, f) => {
             let isUs = a === anim && f === frame
@@ -63,14 +68,14 @@ function Cam({ camRef, style, anim, hat, flip, muted, onStream }) {
             )
           })
         )
-      }
+      } */}
 
       <div className={cx(styles.Crop, flip || styles.Flip)}>
         <video
           ref={camRef}
           autoPlay
           playsInline
-          muted={muted}
+        // muted={muted}
         // hidden
         />
       </div>
